@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Веб-разработка | Создание сайтов, игр и ботов</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #4f46e5;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        .header {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            color: white;
+            overflow: hidden;
+        }
+
+        .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .slide:nth-child(1) {
+            background-image: url('https://dar.university/wp-content/uploads/2024/02/ezgif-7-ceeb50f22b.jpg');
+        }
+
+        .slide:nth-child(2) {
+            background-image: url('https://fruntend.com/images/placeholders/article-placeholder-1920.jpg');
+        }
+
+        .slide:nth-child(3) {
+            background-image: url('https://www.it-courses.by/wp-content/uploads/2018/06/20-Most-Common-Work-from-Home-Job-Titles.jpg');
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 100px 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-content p {
+            font-size: 1.4em;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        section {
+            padding: 80px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .services {
+            background: var(--light);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card i {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .portfolio {
+            background: white;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .portfolio-item {
+            position: relative;
+            height: 250px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pricing {
+            background: var(--light);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .price-card {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .price-card h3 {
+            color: var(--primary);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .contact {
+            background: var(--dark);
+            color: white;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 40px auto 0;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--secondary);
+        }
+
+        .faq {
+            background: white;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5em;
+            color: var(--primary);
+        }
+
+        .testimonials {
+            background: var(--light);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+
+        .footer {
+            background-color: #1a202c;
+            color: white;
+            padding: 2rem 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .phone-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .social-link {
+            color: white;
+            transition: color 0.3s;
+        }
+        .social-link:hover {
+            color: #60a5fa;
+        }
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        .whatsapp-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .whatsapp-button i {
+            font-size: 32px;
+        }
+
+        /* Add animation for initial appearance */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-button {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="slider">
+            <div class="slide active"></div>
+            <div class="slide"></div>
+            <div class="slide"></div>
+        </div>
+        <div class="header-content">
+            <h1>Создаем Цифровое Будущее</h1>
+            <p>Профессиональная разработка сайтов, игр и телеграм-ботов</p>
+        </div>
+    </header>
+
+    <section class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Наши Услуги</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>Веб-сайты</h3>
+                    <p>Создаём современные и отзывчивые веб-сайты для вашего бизнеса</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Игры</h3>
+                    <p>Разрабатывем увлекательные игры с уникальным геймплеем</p>
+                </div>
+                <div class="service-card">
+                    <i class="fab fa-telegram"></i>
+                    <h3>Телеграм боты</h3>
+                    <p>Создаём функциональных ботов для автоматизации задач</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="portfolio">
+        <div class="container">
+            <div class="section-title">
+                <h2>Портфолио</h2>
+            </div>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <img src="https://i.postimg.cc/7YcRzXWQ/image.png" alt="Проект 1">
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://i.postimg.cc/zDQ72vFy/image.png" alt="Проект 2">
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://i.postimg.cc/wBFcXjBT/image.png" alt="Проект 3">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h2>Цены</h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>Базовый</h3>
+                    <div class="price">30 €</div>
+                    <ul>
+                        <li>Лендинг</li>
+                        <li>До 5 страниц</li>
+                        <li>Базовая SEO-оптимизация</li>
+                    </ul>
+                    <button>Выбрать план</button>
+                </div>
+                <div class="price-card">
+                    <h3>Стандарт</h3>
+                    <div class="price">40 €</div>
+                    <ul>
+                        <li>Многостраничный сайт</li>
+                        <li>До 10 страниц</li>
+                        <li>Расширенная SEO-оптимизация</li>
+                    </ul>
+                    <button>Выбрать план</button>
+                </div>
+                <div class="price-card">
+                    <h3>Премиум</h3>
+                    <div class="price">50 €</div>
+                    <ul>
+                        <li>Интернет-магазин</li>
+                        <li>Неограниченное количество страниц</li>
+                        <li>Полная SEO-оптимизация</li>
+                    </ul>
+                    <button>Выбрать план</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Отзывы</h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <h3>Иван Петров</h3>
+                    <p>"Отличная работа! Сайт превзошел все наши ожидания."</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Анна Иванова</h3>
+                    <p>"Профессиональный подход и креативные решения."</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Дмитрий Сидоров</h3>
+                    <p>"Команда выполнила проект точно в срок. Очень доволен результатом!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Елена Смирнова</h3>
+                    <p>"Телеграм-бот, который они разработали, значительно упростил работу нашего сервиса."</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Максим Козлов</h3>
+                    <p>"Впечатляющий дизайн и удобный интерфейс. Рекомендую!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Ольга Николаева</h3>
+                    <p>"Отзывчивая команда, всегда на связи. Сайт работает безупречно."</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Артем Морозов</h3>
+                    <p>"Игра, которую они создали, стала хитом среди наших пользователей."</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Наталья Кузнецова</h3>
+                    <p>"Качественная техническая поддержка и постоянные обновления."</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Сергей Васильев</h3>
+                    <p>"Современные технологии и инновационные решения. Превосходно!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <h3>Марина Соколова</h3>
+                    <p>"Индивидуальный подход и внимание к деталям. Очень довольна сотрудничеством."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <section class="faq">
+        <div class="container">
+            <div class="section-title">
+                <h2>Частые вопросы</h2>
+            </div>
+            <div class="faq-item">
+                <h3>Сколько времени занимает разработка?</h3>
+                <p>Сроки зависят от сложности проекта, обычно от 3 дней до 1 недели.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Какие технологии вы используете?</h3>
+                <p>Мы работаем с современным стеком технологий: React, Node.js, Python и другими.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Предоставляете ли вы техническую поддержку?</h3>
+                <p>Да, мы обеспечиваем техническую поддержку всех наших проектов в течение гарантийного периода и после него по договоренности.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Можно ли внести изменения в проект после его завершения?</h3>
+                <p>Конечно, мы предоставляем услуги по доработке и обновлению существующих проектов.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Как происходит процесс оплаты?</h3>
+                <p>Оплата производится поэтапно: предоплата 50% для начала работ, оставшаяся сумма после завершения проекта.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Связаться с нами</h2>
+            </div>
+            <div class="contact-form">
+                <input type="text" placeholder="Ваше имя">
+                <input type="email" placeholder="Email">
+                <textarea placeholder="Ваше сообщение" rows="5"></textarea>
+                <button>Отправить</button>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <a href="tel:+37123662366" class="phone-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    +371 23662366
+                </a>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Показываем первый слайд
+        showSlide(0);
+
+        // Меняем слайды каждые 4 секунды
+        setInterval(nextSlide, 4000);
+    });
+</script>
+    <a href="https://wa.me/+371 23662366" class="whatsapp-button" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>
